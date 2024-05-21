@@ -1,0 +1,6 @@
+POST {{baseUrl}}/refresh-session
+Content-Type: application/json
+
+{
+  "refreshToken": "<refreshToken>"
+}

@@ -1,0 +1,6 @@
+POST {{baseUrl}}/send-otp
+Content-Type: application/json
+
+{
+  "username": "uribesotod@gmail.com"
+}
