@@ -3,6 +3,6 @@ Content-Type: application/json
 
 {
   "username": "uribesotod@gmail.com",
-  "session": "<session>",
-  "otp": "983704"
+  "session": "{{session}}",
+  "otp": "689326"
 }
