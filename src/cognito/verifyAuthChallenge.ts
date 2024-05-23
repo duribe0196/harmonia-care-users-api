@@ -1,5 +1,7 @@
 import User, { UserRole } from "../db/models/user";
 import { VerifyAuthChallengeResponseTriggerEvent } from "aws-lambda";
+import connectDB from "../db";
+
 export default async function verifyAuthChallenge(
   event: VerifyAuthChallengeResponseTriggerEvent,
   context: any,
@@ -7,7 +9,7 @@ export default async function verifyAuthChallenge(
   console.log(
     `verifyAuthChallenge - Handling Cognito trigger VerifyAuthChallengeResponse_Authentication ${JSON.stringify(event)}`,
   );
-
+  await connectDB();
   // Retrieve the user's answer and the correct answer from the private challenge parameters
   const userAnswer = event.request.challengeAnswer;
   const correctAnswer = event.request.privateChallengeParameters

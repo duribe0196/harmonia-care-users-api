@@ -1,11 +1,12 @@
 import { saveUserLogin } from "../services/userService";
 import { sendEmailMessage } from "../services/emailService";
+import connectDB from "../db";
 
 export default async function createAuthChallenge(event: any, _context: any) {
   console.log(
     "createAuthChallenge - Handling Cognito trigger CreateAuthChallenge_Authentication",
   );
-
+  await connectDB();
   if (
     !event.request.session ||
     event.request.session.length === 0 ||
