@@ -14,10 +14,10 @@ export default async function createAuthChallenge(event: any, _context: any) {
   ) {
     // Generate a unique one-time code (OTC) for authentication
     const oneTimeCode = Math.random().toString(10).substr(2, 6);
-    console.log(
-      `createAuthChallenge - Generated new OTP Code ${oneTimeCode} for email ${event.request.userAttributes.email}`,
-    );
 
+    console.log(
+      `createAuthChallenge - Will send email - new OTP Code ${oneTimeCode} for email ${event.request.userAttributes.email}`,
+    );
     const messageId = await sendEmailMessage(
       event.request.userAttributes.email,
       oneTimeCode,
@@ -27,13 +27,19 @@ export default async function createAuthChallenge(event: any, _context: any) {
       console.error(errorMessage);
       throw new Error(errorMessage);
     }
+
     console.log(
-      `createAuthChallenge - Sending email - new OTP Code ${oneTimeCode} for email ${event.request.userAttributes.email}`,
+      `createAuthChallenge - Saving user login - OTP Code ${oneTimeCode} for email ${event.request.userAttributes.email}`,
     );
+
     await saveUserLogin(
       event.request.userAttributes.email,
       oneTimeCode,
       messageId,
+    );
+
+    console.log(
+      `createAuthChallenge - Saved user login - OTP Code ${oneTimeCode} for email ${event.request.userAttributes.email}`,
     );
 
     // Set the challenge metadata so you can verify it later

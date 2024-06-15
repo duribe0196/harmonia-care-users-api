@@ -27,6 +27,7 @@ export default async function verifyAuthChallenge(
         await newUser.save();
       }
     } catch (error) {
+      console.error(`verifyAuthChallenge error - while saving user data`);
       console.error(error);
     }
   }
