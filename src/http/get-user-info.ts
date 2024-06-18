@@ -1,8 +1,5 @@
-import {
-  CognitoIdentityProviderClient,
-  GetUserCommand,
-  GetUserCommandInput,
-} from "@aws-sdk/client-cognito-identity-provider";
+import { CognitoJwtVerifier } from "aws-jwt-verify";
+import { getSecrets } from "../secrets";
 
 export default async function (token: string, _context: any) {
   if (!token) {
@@ -13,18 +10,25 @@ export default async function (token: string, _context: any) {
   }
 
   try {
-    const { REGION } = process.env;
-    const client = new CognitoIdentityProviderClient({ region: REGION! });
+    const { COGNITO_SECRET_NAME, REGION } = process.env;
+    const cognitoSecrets = await getSecrets({
+      secretName: COGNITO_SECRET_NAME!,
+      region: REGION!,
+    });
+    const verifier = CognitoJwtVerifier.create({
+      userPoolId: cognitoSecrets["userPoolId"],
+      tokenUse: "id",
+      clientId: cognitoSecrets["userPoolClientId"],
+    });
 
-    const input: GetUserCommandInput = {
-      AccessToken: token,
-    };
-    const command = new GetUserCommand(input);
-    const userData = await client.send(command);
+    const payload = await verifier.verify(token, {
+      clientId: cognitoSecrets["clientId"],
+      tokenUse: "id",
+    });
 
     return {
       statusCode: 200,
-      body: JSON.stringify(userData),
+      body: JSON.stringify(payload),
     };
   } catch (error) {
     console.error("get user info - something went wrong", error);
