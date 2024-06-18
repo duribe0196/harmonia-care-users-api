@@ -40,7 +40,7 @@ export const handleCognitoTriggerEvents = async (
   }
 };
 
-export const handleHttpRequests = (
+export const handleHttpRequests = async (
   event: APIGatewayEvent,
   context: Context,
 ) => {
@@ -68,7 +68,7 @@ export const handleHttpRequests = (
   switch (resource) {
     case "POST-/users/send-otp":
       if (requestBody && requestBody.username) {
-        return initiateAuth(requestBody.username, context);
+        return await initiateAuth(requestBody.username, context);
       } else {
         return {
           statusCode: 400,
@@ -84,7 +84,7 @@ export const handleHttpRequests = (
         requestBody.otp &&
         requestBody.session
       ) {
-        return completeAuth(
+        return await completeAuth(
           requestBody.username,
           requestBody.otp,
           requestBody.session,
@@ -101,7 +101,7 @@ export const handleHttpRequests = (
 
     case "POST-/users/refresh-session":
       if (requestBody && requestBody.refreshToken) {
-        return refreshSession(requestBody.refreshToken, context);
+        return await refreshSession(requestBody.refreshToken, context);
       } else {
         return {
           statusCode: 400,
@@ -112,8 +112,9 @@ export const handleHttpRequests = (
       }
 
     case "GET-/users/get-user-info":
+      console.log(JSON.stringify(event));
       if (event.headers["authorization"]) {
-        return getUserInfo(event.headers["authorization"], context);
+        return await getUserInfo(event.headers["authorization"], context);
       } else {
         return {
           statusCode: 400,
