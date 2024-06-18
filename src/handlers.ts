@@ -113,8 +113,8 @@ export const handleHttpRequests = async (
 
     case "GET-/users/get-user-info":
       console.log(JSON.stringify(event));
-      if (event.headers["authorization"]) {
-        return await getUserInfo(event.headers["authorization"], context);
+      if (event.headers["Authorization"]) {
+        return await getUserInfo(event.headers["Authorization"], context);
       } else {
         return {
           statusCode: 400,
