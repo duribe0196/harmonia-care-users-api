@@ -22,7 +22,7 @@ export default async function (token: string, _context: any) {
     });
 
     const payload = await verifier.verify(token, {
-      clientId: cognitoSecrets["clientId"],
+      clientId: cognitoSecrets["userPoolClientId"],
       tokenUse: "id",
     });
 
