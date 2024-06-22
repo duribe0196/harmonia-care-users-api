@@ -14,6 +14,7 @@ import initiateAuth from "./http/initiate-auth";
 import completeAuth from "./http/complete-auth";
 import refreshSession from "./http/refresh-session";
 import getUserInfo from "./http/get-user-info";
+import signOut from "./http/sign-out";
 import { getNotFoundResponse } from "./utils";
 
 type CognitoTriggerEvent =
@@ -73,7 +74,7 @@ export const handleHttpRequests = async (
         return {
           statusCode: 400,
           body: JSON.stringify({
-            message: "Please verify the inputs",
+            message: "Send OTP: Please verify the inputs",
           }),
         };
       }
@@ -94,7 +95,7 @@ export const handleHttpRequests = async (
         return {
           statusCode: 400,
           body: JSON.stringify({
-            message: "Please verify the inputs",
+            message: "Verify OTP: Please verify the inputs",
           }),
         };
       }
@@ -106,7 +107,19 @@ export const handleHttpRequests = async (
         return {
           statusCode: 400,
           body: JSON.stringify({
-            message: "Please verify the inputs",
+            message: "Refresh session: Please verify the inputs",
+          }),
+        };
+      }
+
+    case "POST-/users/sign-out":
+      if (requestBody && requestBody.accessToken) {
+        return await signOut(requestBody.accessToken, context);
+      } else {
+        return {
+          statusCode: 400,
+          body: JSON.stringify({
+            message: "Sign Out: Please verify the inputs",
           }),
         };
       }
@@ -119,7 +132,7 @@ export const handleHttpRequests = async (
         return {
           statusCode: 400,
           body: JSON.stringify({
-            message: "Please verify the inputs",
+            message: "Get User Info: Please verify the inputs",
           }),
         };
       }
